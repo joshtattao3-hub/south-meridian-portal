@@ -1,0 +1,26 @@
+const COLORS = {
+  primary:     "#2E7D32",
+  primaryDark: "#1B5E20",
+  primaryLight:"#4CAF50",
+  primaryBg:   "#E8F5E9",
+  gold:        "#F9A825",
+  goldDark:    "#F57F17",
+  goldLight:   "#FFF8E1",
+  white:       "#FFFFFF",
+  bg:          "#F5F7F5",
+  text:        "#263238",
+  textMid:     "#546E7A",
+  textLight:   "#90A4AE",
+  border:      "#E0E7E0",
+  card:        "#FFFFFF",
+  danger:      "#C62828",
+  dangerBg:    "#FFEBEE",
+  warning:     "#E65100",
+  warningBg:   "#FFF3E0",
+  success:     "#1B5E20",
+  successBg:   "#E8F5E9",
+  info:        "#01579B",
+  infoBg:      "#E3F2FD",
+};
+
+export default COLORS;

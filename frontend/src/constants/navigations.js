@@ -1,0 +1,1 @@
+const NAV_LINKS = ["Home","About","Announcements","Events","Contact"];
