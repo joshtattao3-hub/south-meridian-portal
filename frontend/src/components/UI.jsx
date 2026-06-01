@@ -16,30 +16,69 @@ export function Btn({ children, variant = "primary", small, onClick, style = {} 
   const base = {
     border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 600,
     fontFamily: "inherit", display: "inline-flex", alignItems: "center", gap: 6,
-    transition: "all 0.15s", fontSize: small ? 13 : 14,
+    transition: "all 0.2s ease", fontSize: small ? 13 : 14,
     padding: small ? "6px 14px" : "10px 22px",
-    ...style,
+    outline: "none",
   };
-  if (variant === "primary") return <button style={{ ...base, background: COLORS.primary, color: "#fff" }} onClick={onClick}>{children}</button>;
-  if (variant === "gold") return <button style={{ ...base, background: COLORS.gold, color: COLORS.text }} onClick={onClick}>{children}</button>;
-  if (variant === "ghost") return <button style={{ ...base, background: "transparent", color: COLORS.primary, border: `1.5px solid ${COLORS.primary}` }} onClick={onClick}>{children}</button>;
-  if (variant === "danger") return <button style={{ ...base, background: COLORS.danger, color: "#fff" }} onClick={onClick}>{children}</button>;
-  if (variant === "light") return <button style={{ ...base, background: COLORS.bg, color: COLORS.text, border: `1px solid ${COLORS.border}` }} onClick={onClick}>{children}</button>;
-  if (variant === "outline-white") return ( <button style={{ ...base, background: "rgba(255,255,255,0.12)", color: "#fff", border: "1.5px solid rgba(255,255,255,0.6)" }} onClick={onClick}>{children}</button>
-);
-  return <button style={base} onClick={onClick}>{children}</button>;
+
+  const hoverClass = `btn-${variant}`;
+
+  const variantStyles = {
+    primary: { background: COLORS.primary, color: "#fff" },
+    gold: { background: COLORS.gold, color: COLORS.text },
+    ghost: { background: "transparent", color: COLORS.primary, border: `1.5px solid ${COLORS.primary}` },
+    danger: { background: COLORS.danger, color: "#fff" },
+    light: { background: COLORS.bg, color: COLORS.text, border: `1px solid ${COLORS.border}` },
+    "outline-white": { background: "rgba(255,255,255,0.12)", color: "#fff", border: "1.5px solid #ffffff" },
+  };
+
+  const vs = variantStyles[variant] || {};
+
+  return (
+    <>
+      <style>{`
+        .btn-primary:hover { background: ${COLORS.primaryDark || "#1a3a5c"} !important; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .btn-gold:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .btn-ghost:hover { background: ${COLORS.primary}18 !important; transform: translateY(-1px); }
+        .btn-danger:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .btn-light:hover { background: ${COLORS.border} !important; transform: translateY(-1px); }
+        .btn-outline-white:hover { background: rgba(255,255,255,0.25) !important; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(255,255,255,0.15); }
+        .btn-primary:active, .btn-gold:active, .btn-ghost:active, .btn-danger:active, .btn-light:active, .btn-outline-white:active { transform: translateY(0px) scale(0.98); }
+      `}</style>
+      <button className={hoverClass} style={{ ...base, ...vs, ...style }} onClick={onClick}>
+        {children}
+      </button>
+    </>
+  );
 }
 
-export function Card({ children, style = {}, pad = "1.5rem" }) {
-  return <div style={{ background: COLORS.card, borderRadius: 14, border: `1px solid ${COLORS.border}`, padding: pad, ...style }}>{children}</div>;
+export function Card({ children, style = {}, pad = "1.5rem", hoverable = false }) {
+  return (
+    <>
+      {hoverable && (
+        <style>{`.hoverable-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.10) !important; border-color: ${COLORS.primary}44 !important; }`}</style>
+      )}
+      <div
+        className={hoverable ? "hoverable-card" : ""}
+        style={{
+          background: COLORS.card, borderRadius: 14,
+          border: `1px solid ${COLORS.border}`, padding: pad,
+          transition: "all 0.2s ease",
+          ...style
+        }}
+      >
+        {children}
+      </div>
+    </>
+  );
 }
 
 export function StatCard({ icon, label, value, color = COLORS.primary, sub }) {
   return (
-    <Card pad="1.25rem" style={{ display:"flex", flexDirection:"column", gap: 8 }}>
+    <Card pad="1.25rem" hoverable style={{ display:"flex", flexDirection:"column", gap: 8 }}>
       <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
         <span style={{ fontSize: 13, color: COLORS.textMid, fontWeight: 500 }}>{label}</span>
-        <div style={{ background: color + "18", borderRadius: 10, padding: 8, display:"flex" }}>
+        <div style={{ background: color + "18", borderRadius: 10, padding: 8, display:"flex", transition: "transform 0.2s" }}>
           <Icon name={icon} size={20} color={color} />
         </div>
       </div>
