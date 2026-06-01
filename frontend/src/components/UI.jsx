@@ -25,6 +25,8 @@ export function Btn({ children, variant = "primary", small, onClick, style = {} 
   if (variant === "ghost") return <button style={{ ...base, background: "transparent", color: COLORS.primary, border: `1.5px solid ${COLORS.primary}` }} onClick={onClick}>{children}</button>;
   if (variant === "danger") return <button style={{ ...base, background: COLORS.danger, color: "#fff" }} onClick={onClick}>{children}</button>;
   if (variant === "light") return <button style={{ ...base, background: COLORS.bg, color: COLORS.text, border: `1px solid ${COLORS.border}` }} onClick={onClick}>{children}</button>;
+  if (variant === "outline-white") return ( <button style={{ ...base, background: "rgba(255,255,255,0.12)", color: "#fff", border: "1.5px solid rgba(255,255,255,0.6)" }} onClick={onClick}>{children}</button>
+);
   return <button style={base} onClick={onClick}>{children}</button>;
 }
 

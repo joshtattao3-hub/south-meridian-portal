@@ -22,7 +22,7 @@ export default function PublicNav({ setView, mobileOpen, setMobileOpen }) {
             <button key={l} onClick={() => setView(l.toLowerCase())} style={{ background:"none", border:"none", color:"rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 500, cursor:"pointer", padding: "8px 12px", borderRadius: 6, fontFamily:"inherit" }}>{l}</button>
           ))}
           <div style={{ width: 1, height: 24, background:"rgba(255,255,255,0.2)", margin:"0 8px" }} />
-          <Btn small onClick={() => setView("login")} variant="ghost" style={{ color:"#fff", borderColor:"rgba(255,255,255,0.5)" }}>Log In</Btn>
+          <Btn small onClick={() => setView("login")} variant="outline-white">Log In</Btn>
           <Btn small onClick={() => setView("register")} variant="gold">Register</Btn>
         </div>
       </div>
