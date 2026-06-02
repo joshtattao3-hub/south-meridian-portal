@@ -10,6 +10,7 @@ export default function LoginPage({ setView }) {
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
   const [touched, setTouched] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const validate = (f) => {
     const e = {};
@@ -46,6 +47,8 @@ export default function LoginPage({ setView }) {
       setLoading(false);
     }
   };
+
+  const handleKeyDown = (e) => { if (e.key === "Enter") handleLogin(e); };
 
   const handleChange = (k, v) => {
     setForm(f => ({ ...f, [k]: v }));
@@ -85,6 +88,7 @@ export default function LoginPage({ setView }) {
                 value={form.email}
                 onChange={e => handleChange("email", e.target.value)}
                 onBlur={() => { touch("email"); setErrors(e => ({ ...e, email: validate(form).email })); }}
+                onKeyDown={handleKeyDown}
                 placeholder="you@email.com"
                 style={fieldStyle("email")}
               />
@@ -100,16 +104,26 @@ export default function LoginPage({ setView }) {
               )}
             </div>
 
-            <div style={{ marginBottom: 20 }}>
+           <div style={{ marginBottom: 20 }}>
               <label style={{ fontSize: 12, fontWeight: 600, color: COLORS.textMid, display: "block", marginBottom: 6 }}>Password</label>
-              <input
-                type="password"
-                value={form.password}
-                onChange={e => handleChange("password", e.target.value)}
-                onBlur={() => { touch("password"); setErrors(e => ({ ...e, password: validate(form).password })); }}
-                placeholder="••••••••"
-                style={fieldStyle("password")}
-              />
+              <div style={{ position: "relative" }}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={form.password}
+                  onChange={e => handleChange("password", e.target.value)}
+                  onBlur={() => { touch("password"); setErrors(e => ({ ...e, password: validate(form).password })); }}
+                  onKeyDown={handleKeyDown}
+                  placeholder="••••••••"
+                  style={{ ...fieldStyle("password"), paddingRight: 40 }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(s => !s)}
+                  style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex" }}
+                >
+                  <Icon name={showPassword ? "eye-off" : "eye"} size={16} color={COLORS.textMid} />
+                </button>
+              </div>
               {touched.password && errors.password && (
                 <div style={{ fontSize: 11, color: COLORS.danger, marginTop: 4, display: "flex", alignItems: "center", gap: 4 }}>
                   <Icon name="info" size={11} color={COLORS.danger} /> {errors.password}

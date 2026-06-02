@@ -20,11 +20,10 @@ export default function PortalHeader({ title }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Derive initials from user object
   const initials = user?.initials
-    || (user?.name ? user.name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase() : "?");
+    || `${user?.first_name?.[0] ?? ""}${user?.last_name?.[0] ?? ""}`.toUpperCase() || "?";
 
-  const displayName = user?.name || "User";
+  const displayName = `${user?.first_name ?? ""} ${user?.last_name ?? ""}`.trim() || "User";
   const displayRole = user?.role
     ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
     : "";

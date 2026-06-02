@@ -40,9 +40,9 @@ function AppContent() {
     <div style={{ fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif", color: COLORS.text, background: COLORS.bg }}>
       <PublicNav setView={setView} currentView={view} />
       {view === "home"          && <HomePage setView={setView} />}
-      {view === "announcements" && <AnnouncementsPage />}
+      {view === "announcements" && <AnnouncementsPage setView={setView} />}
       {view === "contact"       && <ContactPage />}
-      {view === "events"        && <EventsPage />}
+      {view === "events"        && <EventsPage setView={setView} />}
       {view === "about"         && <AboutPage />}
     </div>
   );

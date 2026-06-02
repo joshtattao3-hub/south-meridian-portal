@@ -206,7 +206,7 @@ export function ContactPage() {
   );
 }
 
-export function EventsPage() {
+export function EventsPage({ setView }) {
   const items = EVENTS;
   return (
     <>
@@ -238,7 +238,7 @@ export function EventsPage() {
                       <div style={{ fontWeight: 700, fontSize: 16, color: COLORS.text }}>{e.title}</div>
                       <div style={{ fontSize: 13, color: COLORS.textMid, marginTop: 4 }}>{e.date} · {e.time} · {e.venue}</div>
                     </div>
-                    <Btn small variant="ghost">Details</Btn>
+                    <Btn small variant="ghost" onClick={() => setView("login")}>Details</Btn>
                   </div>
                 </Card>
               ))}

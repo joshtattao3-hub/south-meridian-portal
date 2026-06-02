@@ -10,6 +10,8 @@ export default function RegisterPage({ setView }) {
   const [touched, setTouched] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [showPass, setShowPass]       = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const validate = (f) => {
     const e = {};
@@ -65,6 +67,8 @@ export default function RegisterPage({ setView }) {
       setLoading(false);
     }
   };
+
+  const handleKeyDown = (e) => { if (e.key === "Enter") handleRegister(e); };
 
   if (success) {
     return (
@@ -127,10 +131,30 @@ export default function RegisterPage({ setView }) {
             ))}
 
             <div className="reg-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
-              {[["password", "Password"], ["confirm", "Confirm Password"]].map(([k, label]) => (
+              {[
+                ["password", "Password",         showPass,    setShowPass],
+                ["confirm",  "Confirm Password", showConfirm, setShowConfirm],
+              ].map(([k, label, show, setShow]) => (
                 <div key={k}>
                   <label style={{ fontSize: 12, fontWeight: 600, color: COLORS.textMid, display: "block", marginBottom: 5 }}>{label}</label>
-                  <input type="password" value={form[k]} onChange={e => set(k, e.target.value)} onBlur={() => { touch(k); setErrors(er => ({ ...er, [k]: validate(form)[k] })); }} placeholder="••••••••" style={fieldStyle(k)} />
+                  <div style={{ position: "relative" }}>
+                    <input
+                      type={show ? "text" : "password"}
+                      value={form[k]}
+                      onChange={e => set(k, e.target.value)}
+                      onBlur={() => { touch(k); setErrors(er => ({ ...er, [k]: validate(form)[k] })); }}
+                      onKeyDown={handleKeyDown}
+                      placeholder="••••••••"
+                      style={{ ...fieldStyle(k), paddingRight: 40 }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShow(s => !s)}
+                      style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex" }}
+                    >
+                      <Icon name={show ? "eye-off" : "eye"} size={16} color={COLORS.textMid} />
+                    </button>
+                  </div>
                   <FieldMsg k={k} />
                 </div>
               ))}

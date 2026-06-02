@@ -4,6 +4,7 @@ import Sidebar from "../../components/Sidebar";
 import PortalHeader from "../../components/PortalHeader";
 import { Badge, Btn, Card } from "../../components/UI";
 import Icon from "../../components/Icon";
+import { useAuth } from "../../context/AuthContext";
 
 import ResidentDashboard from "../resident/ResidentDashboard";
 import { ComplaintsPage, DuesPage, ReservationsPage, DocumentsPage } from "../resident/ResidentPages";
@@ -12,6 +13,7 @@ import AnnouncementsPage from "../public/AnnouncementsPage";
 
 export function ResidentPortal({ setView }) {
   const [page, setPage] = useState("dashboard");
+  const { user } = useAuth();
 
   const pageMap = {
     "dashboard": { title: "Dashboard", comp: <ResidentDashboard /> },
@@ -28,7 +30,14 @@ export function ResidentPortal({ setView }) {
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar role="resident" activePage={page} setActivePage={setPage} setView={setView} />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", background: COLORS.bg, overflow: "auto" }}>
-        <PortalHeader title={current.title} user={{ initials: "MS", name: "Maria Santos", role: "Resident · Blk 5 Lot 12" }} />
+        <PortalHeader
+          title={current.title}
+          user={{
+            initials: `${user?.first_name?.[0] ?? ""}${user?.last_name?.[0] ?? ""}`.toUpperCase(),
+            name: `${user?.first_name ?? ""} ${user?.last_name ?? ""}`.trim(),
+            role: `Resident · ${user?.block_lot ?? ""}`,
+          }}
+        />
         {current.comp}
       </div>
     </div>
@@ -37,6 +46,7 @@ export function ResidentPortal({ setView }) {
 
 export function OfficerPortal({ setView }) {
   const [page, setPage] = useState("officer-dashboard");
+  const { user } = useAuth();
 
   const pageMap = {
     "officer-dashboard": { title: "Officer Dashboard", comp: <AdminDashboardPage /> },
@@ -52,7 +62,14 @@ export function OfficerPortal({ setView }) {
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar role="officer" activePage={page} setActivePage={setPage} setView={setView} />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", background: COLORS.bg }}>
-        <PortalHeader title={current.title} user={{ initials: "AC", name: "Ana Cruz", role: "HOA Officer" }} />
+        <PortalHeader
+          title={current.title}
+          user={{
+            initials: `${user?.first_name?.[0] ?? ""}${user?.last_name?.[0] ?? ""}`.toUpperCase(),
+            name: `${user?.first_name ?? ""} ${user?.last_name ?? ""}`.trim(),
+            role: "HOA Officer",
+          }}
+        />
         {current.comp}
       </div>
     </div>
@@ -61,6 +78,7 @@ export function OfficerPortal({ setView }) {
 
 export function AdminPortal({ setView }) {
   const [page, setPage] = useState("admin-dashboard");
+  const { user } = useAuth();
 
   const pageMap = {
     "admin-dashboard": { title: "Admin Dashboard", comp: <AdminDashboardPage /> },
@@ -75,11 +93,18 @@ export function AdminPortal({ setView }) {
 
   const current = pageMap[page] || pageMap["admin-dashboard"];
 
-  return (
+ return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar role="admin" activePage={page} setActivePage={setPage} setView={setView} />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", background: COLORS.bg, overflow: "auto" }}>
-        <PortalHeader title={current.title} user={{ initials: "JT", name: "Joshua Tattao", role: "Administrator" }} />
+        <PortalHeader
+          title={current.title}
+          user={{
+            initials: `${user?.first_name?.[0] ?? ""}${user?.last_name?.[0] ?? ""}`.toUpperCase(),
+            name: `${user?.first_name ?? ""} ${user?.last_name ?? ""}`.trim(),
+            role: "Administrator",
+          }}
+        />
         {current.comp}
       </div>
     </div>

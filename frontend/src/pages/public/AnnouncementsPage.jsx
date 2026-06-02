@@ -19,7 +19,7 @@ function SkeletonCard() {
   );
 }
 
-export default function AnnouncementsPage() {
+export default function AnnouncementsPage({ setView }) {
   const [loading] = useState(false); // set to true to preview skeleton
   const items = ANNOUNCEMENTS;
 
@@ -57,7 +57,7 @@ export default function AnnouncementsPage() {
                     <Badge label={a.tag} />
                     <span style={{ fontSize: 11, color: COLORS.textLight }}>{a.date}</span>
                   </div>
-                  <Btn small variant="light">Read More</Btn>
+                  <Btn small variant="light" onClick={() => setView("login")}>Read More</Btn>
                 </div>
                 <div style={{ fontWeight: 700, fontSize: 15, color: COLORS.text, marginBottom: 6 }}>{a.title}</div>
                 <p style={{ fontSize: 13, color: COLORS.textMid, margin: 0, lineHeight: 1.6 }}>{a.body}</p>
