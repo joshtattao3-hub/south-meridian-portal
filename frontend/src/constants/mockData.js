@@ -43,7 +43,7 @@ export const USERS_ADMIN = [
 ];
 
 export const STAT_COLOR = {
-  "Resolved": COLORS.success,
+  "Approved": COLORS.success,
   "Paid": COLORS.success,
   "In Progress": COLORS.info,
   "Under Review": COLORS.warning,

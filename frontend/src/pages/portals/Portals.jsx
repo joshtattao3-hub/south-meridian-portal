@@ -1,11 +1,8 @@
 import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 import COLORS from "../../constants/colors";
 import Sidebar from "../../components/Sidebar";
 import PortalHeader from "../../components/PortalHeader";
-import { Badge, Btn, Card } from "../../components/UI";
-import Icon from "../../components/Icon";
-import { useAuth } from "../../context/AuthContext";
-
 import ResidentDashboard from "../resident/ResidentDashboard";
 import { ComplaintsPage, DuesPage, ReservationsPage, DocumentsPage } from "../resident/ResidentPages";
 import { AdminDashboardPage, UserManagementPage, ReportsPage, ManageComplaintsPage, SystemSettingsPage } from "../admin/AdminPages";
@@ -61,7 +58,7 @@ export function OfficerPortal({ setView }) {
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar role="officer" activePage={page} setActivePage={setPage} setView={setView} />
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", background: COLORS.bg }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", background: COLORS.bg, overflow: "auto" }}>
         <PortalHeader
           title={current.title}
           user={{
@@ -93,7 +90,7 @@ export function AdminPortal({ setView }) {
 
   const current = pageMap[page] || pageMap["admin-dashboard"];
 
- return (
+  return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar role="admin" activePage={page} setActivePage={setPage} setView={setView} />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", background: COLORS.bg, overflow: "auto" }}>

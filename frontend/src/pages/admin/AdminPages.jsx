@@ -5,7 +5,7 @@ import { COMPLAINTS, USERS_ADMIN } from "../../constants/mockData";
 
 export function AdminDashboardPage() {
   const bar = [65, 80, 55, 90, 70, 85, 92, 78, 60, 88, 95, 75];
-  const months = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+  const months = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
 
   return (
     <div style={{ padding: 28 }}>
@@ -14,7 +14,7 @@ export function AdminDashboardPage() {
         <StatCard icon="user" label="Active Users" value="387" color={COLORS.info} sub="92% activity rate" />
         <StatCard icon="chat" label="Pending Complaints" value="12" color={COLORS.danger} sub="3 high priority" />
         <StatCard icon="dollar" label="June Collections" value="₱312K" color={COLORS.success} sub="87% collected" />
-        <StatCard icon="calendar" label="Reservations" value="8" color={COLORS.goldDark} sub="3 pending review" />
+        <StatCard icon="calendar" label="Reservations" value="8" color={COLORS.goldDark ?? COLORS.gold} sub="3 pending review" />
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 20, marginBottom: 20 }}>
@@ -26,7 +26,7 @@ export function AdminDashboardPage() {
           <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 120 }}>
             {bar.map((v, i) => (
               <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-                <div style={{ width: "100%", background: i === 4 ? COLORS.primary : COLORS.primaryBg, borderRadius: "3px 3px 0 0", height: `${v * 1.1}px`, transition: "height 0.3s" }} />
+                <div style={{ width: "100%", background: i === 4 ? COLORS.primary : COLORS.primaryBg, borderRadius: "3px 3px 0 0", height: `${(v / 100) * 110}px`, transition: "height 0.3s" }} />
                 <span style={{ fontSize: 9, color: COLORS.textLight }}>{months[i]}</span>
               </div>
             ))}
@@ -49,7 +49,7 @@ export function AdminDashboardPage() {
           </div>
           <div style={{ marginTop: 20 }}>
             <div style={{ fontSize: 11, color: COLORS.textMid, marginBottom: 8, fontWeight: 600 }}>Complaint Status</div>
-            {[["Pending", 4], ["In Progress", 5], ["Resolved", 3]].map(([s, n]) => (
+            {[["Pending", 4], ["In Progress", 5], ["Resolved", 3]].map(([s]) => (
               <div key={s} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: `1px solid ${COLORS.border}`, fontSize: 12 }}>
                 <span style={{ color: COLORS.textMid }}>{s}</span>
                 <Badge label={s} />
@@ -165,7 +165,7 @@ export function ReportsPage() {
           { title: "Dues Collection Report", desc: "Monthly and annual collection summaries, payment status breakdown", icon: "dollar", color: COLORS.success },
           { title: "Complaint Summary", desc: "Complaint volume, resolution rate, category breakdown", icon: "chat", color: COLORS.danger },
           { title: "Resident Directory", desc: "Complete list of registered households with contact details", icon: "users", color: COLORS.primary },
-          { title: "Facility Usage Report", desc: "Reservation frequency, popular facilities, peak hours", icon: "building", color: COLORS.goldDark },
+          { title: "Facility Usage Report", desc: "Reservation frequency, popular facilities, peak hours", icon: "building", color: COLORS.goldDark ?? COLORS.gold},
           { title: "Financial Statement", desc: "Monthly income vs. expenses, fund balance", icon: "chart", color: COLORS.info },
           { title: "Audit Log", desc: "System activity, user actions, and change history", icon: "file", color: "#6A1B9A" },
         ].map(r => (
@@ -205,7 +205,7 @@ export function ManageComplaintsPage() {
             {COMPLAINTS.map(c => (
               <tr key={c.id} style={{ borderBottom: `1px solid ${COLORS.border}` }}>
                 <td style={{ padding: "12px", fontWeight: 600, color: COLORS.primary, fontSize: 12 }}>{c.id}</td>
-                <td style={{ padding: "12px", color: COLORS.text }}>Maria Santos</td>
+                <td style={{ padding: "12px", color: COLORS.text }}>{c.resident ?? "—"}</td>
                 <td style={{ padding: "12px", color: COLORS.text }}>{c.subject}</td>
                 <td style={{ padding: "12px" }}><Badge label={c.priority} /></td>
                 <td style={{ padding: "12px" }}><Badge label={c.status} /></td>

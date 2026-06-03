@@ -33,9 +33,19 @@ function AppContent() {
     return <ResidentPortal setView={setView} />;
   }
 
-  if (view === "login")    return <><PublicNav setView={setView} currentView={view} /><LoginPage setView={setView} /></>;
-  if (view === "register") return <><PublicNav setView={setView} currentView={view} /><RegisterPage setView={setView} /></>;
-
+  if (view === "login") return (
+    <div style={{ fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif", color: COLORS.text, background: COLORS.bg }}>
+      <PublicNav setView={setView} currentView={view} />
+      <LoginPage setView={setView} />
+    </div>
+  );
+  if (view === "register") return (
+    <div style={{ fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif", color: COLORS.text, background: COLORS.bg }}>
+      <PublicNav setView={setView} currentView={view} />
+      <RegisterPage setView={setView} />
+    </div>
+  );
+    
   return (
     <div style={{ fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif", color: COLORS.text, background: COLORS.bg }}>
       <PublicNav setView={setView} currentView={view} />
@@ -44,6 +54,7 @@ function AppContent() {
       {view === "contact"       && <ContactPage />}
       {view === "events"        && <EventsPage setView={setView} />}
       {view === "about"         && <AboutPage />}
+      {!["home","announcements","contact","events","about"].includes(view) && <HomePage setView={setView} />}
     </div>
   );
 }

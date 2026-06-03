@@ -5,19 +5,19 @@ import Icon from "../../components/Icon";
 
 export default function LoginPage({ setView }) {
   const { login } = useAuth();
-  const [form, setForm]     = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({});
+  const [form, setForm]         = useState({ email: "", password: "" });
+  const [errors, setErrors]     = useState({});
   const [serverError, setServerError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [touched, setTouched] = useState({});
+  const [loading, setLoading]   = useState(false);
+  const [touched, setTouched]   = useState({});
   const [showPassword, setShowPassword] = useState(false);
 
   const validate = (f) => {
     const e = {};
-    if (!f.email)                          e.email    = "Email is required.";
-    else if (!/\S+@\S+\.\S+/.test(f.email)) e.email   = "Enter a valid email address.";
-    if (!f.password)                        e.password = "Password is required.";
-    else if (f.password.length < 6)         e.password = "Password must be at least 6 characters.";
+    if (!f.email)                            e.email    = "Email is required.";
+    else if (!/\S+@\S+\.\S+/.test(f.email)) e.email    = "Enter a valid email address.";
+    if (!f.password)                         e.password = "Password is required.";
+    else if (f.password.length < 6)          e.password = "Password must be at least 6 characters.";
     return e;
   };
 
@@ -31,8 +31,13 @@ export default function LoginPage({ setView }) {
     background: touched[k] && errors[k] ? COLORS.dangerBg : "#fff",
   });
 
+  const handleChange = (k, v) => {
+    setForm(f => ({ ...f, [k]: v }));
+    if (touched[k]) setErrors(e => ({ ...e, [k]: validate({ ...form, [k]: v })[k] }));
+  };
+
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     setTouched({ email: true, password: true });
     const errs = validate(form);
     setErrors(errs);
@@ -42,18 +47,13 @@ export default function LoginPage({ setView }) {
     try {
       await login(form.email, form.password);
     } catch (err) {
-      setServerError(err.message);
+      setServerError(err.message ?? "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleKeyDown = (e) => { if (e.key === "Enter") handleLogin(e); };
-
-  const handleChange = (k, v) => {
-    setForm(f => ({ ...f, [k]: v }));
-    if (touched[k]) setErrors(e => ({ ...e, [k]: validate({ ...form, [k]: v })[k] }));
-  };
+  const handleKeyDown = (e) => { if (e.key === "Enter") handleLogin(); };
 
   return (
     <>
@@ -89,7 +89,7 @@ export default function LoginPage({ setView }) {
                 onChange={e => handleChange("email", e.target.value)}
                 onBlur={() => { touch("email"); setErrors(e => ({ ...e, email: validate(form).email })); }}
                 onKeyDown={handleKeyDown}
-                placeholder="you@email.com"
+                placeholder="email@gmail.com"
                 style={fieldStyle("email")}
               />
               {touched.email && errors.email && (
@@ -104,7 +104,7 @@ export default function LoginPage({ setView }) {
               )}
             </div>
 
-           <div style={{ marginBottom: 20 }}>
+            <div style={{ marginBottom: 20 }}>
               <label style={{ fontSize: 12, fontWeight: 600, color: COLORS.textMid, display: "block", marginBottom: 6 }}>Password</label>
               <div style={{ position: "relative" }}>
                 <input
@@ -130,7 +130,11 @@ export default function LoginPage({ setView }) {
                 </div>
               )}
             </div>
-
+                <div style={{ textAlign: "left", marginBottom: 20, marginTop: -12 }}>
+                  <button style={{ background: "none", border: "none", color: COLORS.primary, fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>
+                    Forgot password?
+                </button>
+                </div>
             <button
               onClick={handleLogin}
               disabled={loading}
