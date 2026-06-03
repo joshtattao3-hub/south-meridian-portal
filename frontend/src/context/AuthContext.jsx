@@ -4,20 +4,27 @@ import { api } from "../api";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser]   = useState(null);
+  const [user, setUser]     = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError]   = useState(null);
 
-  // Restore session on page refresh
   useEffect(() => {
+    let cancelled = false;
     const token = localStorage.getItem("token");
     if (token) {
       api.getMe()
-        .then(u => setUser(u))
-        .catch(() => localStorage.removeItem("token"))
-        .finally(() => setLoading(false));
+        .then(u  => { if (!cancelled) setUser(u); })
+        .catch(() => {
+          if (!cancelled) {
+            localStorage.removeItem("token");
+            setError("Session expired. Please log in again.");
+          }
+        })
+        .finally(() => { if (!cancelled) setLoading(false); });
     } else {
       setLoading(false);
     }
+    return () => { cancelled = true; };
   }, []);
 
   const login = async (email, password) => {
@@ -30,10 +37,11 @@ export function AuthProvider({ children }) {
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
+    api.logout?.();
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, error, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

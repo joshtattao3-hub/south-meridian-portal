@@ -1,12 +1,13 @@
 import { useState } from "react";
 import COLORS from "../../constants/colors";
 import { Badge, Btn, Card, StatCard } from "../../components/UI";
-import Icon from "../../components/Icon";
 import { COMPLAINTS, ANNOUNCEMENTS } from "../../constants/mockData";
 import { useAuth } from "../../context/AuthContext";
 
 export default function ResidentDashboard() {
   const { user } = useAuth();
+  const balance = user?.balance ?? 1500;
+  const duePeriod = user?.due_period ?? "June 2026";
   return (
     <>
       <style>{`
@@ -27,7 +28,7 @@ export default function ResidentDashboard() {
         <div className="dash-banner" style={{ background: `linear-gradient(135deg, ${COLORS.primary} 0%, ${COLORS.primaryLight} 100%)`, borderRadius: 14, padding: "24px 28px", marginBottom: 24, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
             <div style={{ color: "#fff", fontSize: 22, fontWeight: 800 }}>
-              Hello, {user?.first_name ?? "Resident"}!   {/* ✅ was "Maria Santos" */}
+              Hello, {user?.first_name ?? "Resident"}!  
             </div>
             <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, marginTop: 4 }}>
               {user?.block_lot ?? ""} · {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
@@ -36,15 +37,15 @@ export default function ResidentDashboard() {
           <div className="dash-banner-balance" style={{ textAlign: "right" }}>
             <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 10, padding: "12px 20px" }}>
               <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 11, marginBottom: 2 }}>CURRENT BALANCE</div>
-              <div style={{ color: COLORS.gold, fontSize: 28, fontWeight: 800 }}>₱1,500</div>
-              <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 11, marginTop: 2 }}>June 2026 Due</div>
+              <div style={{ color: COLORS.gold, fontSize: 28, fontWeight: 800 }}>₱{balance.toLocaleString()}</div>
+              <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 11, marginTop: 2 }}>{duePeriod} Due</div>
             </div>
           </div>
         </div>
 
         {/* Stat cards */}
         <div className="dash-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16, marginBottom: 24 }}>
-          <StatCard icon="dollar" label="Unpaid Dues"     value="₱1,500" color={COLORS.warning} sub="June 2026" />
+          <StatCard icon="dollar" label="Unpaid Dues" value={`₱${balance.toLocaleString()}`} color={COLORS.warning} sub={duePeriod} />
           <StatCard icon="chat"   label="Open Complaints" value="2"      color={COLORS.danger}  sub="1 in progress" />
           <StatCard icon="calendar" label="Reservations"  value="1"      color={COLORS.primary} sub="Pending approval" />
           <StatCard icon="bell"   label="New Notices"     value="4"      color={COLORS.info}    sub="This month" />

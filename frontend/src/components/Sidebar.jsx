@@ -52,7 +52,7 @@ export default function Sidebar({ role, activePage, setActivePage, setView }) {
       <div className="sidebar-root" style={{ width: collapsed ? 60 : 220, background: COLORS.primaryDark, minHeight: "100vh", display: "flex", flexDirection: "column", flexShrink: 0, transition: "width 0.2s ease" }}>
 
         {/* Header with collapse toggle */}
-        <div style={{ padding: "20px 16px 16px", borderBottom: "1px solid rgba(255,255,255,0.08)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,0.08)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           {!collapsed && (
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <div style={{ background: COLORS.gold, borderRadius: 6, padding: "3px 6px", flexShrink: 0 }}>
@@ -65,8 +65,8 @@ export default function Sidebar({ role, activePage, setActivePage, setView }) {
             </div>
           )}
           {collapsed && (
-            <div onClick={() => setCollapsed(false)} 
-            style={{ background: COLORS.gold, borderRadius: 6, padding: "3px 6px", margin: "0 auto" }}>
+              <div onClick={() => setCollapsed(false)} 
+              style={{ background: COLORS.gold, borderRadius: 6, padding: "3px 6px", margin: "0 auto", cursor: "pointer" }}>
               <Icon name="shield" size={16} color={COLORS.primaryDark} />
             </div>
           )}

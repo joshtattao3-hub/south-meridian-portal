@@ -17,7 +17,7 @@ export default function PublicNav({ setView, currentView, mobileOpen, setMobileO
         .nav-logo:hover { opacity: 0.9; }
       `}</style>
       <nav style={{ background: COLORS.primary, position: "sticky", top: 0, zIndex: 100, boxShadow: "0 2px 16px rgba(0,0,0,0.18)" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ width: "100%", padding: "0 32px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between", boxSizing: "border-box" }}>
           <div className="nav-logo" style={{ display:"flex", alignItems:"center", gap: 10, cursor:"pointer", transition: "opacity 0.2s" }} onClick={() => setView("home")}>
             <div style={{ background: COLORS.gold, borderRadius: 8, padding: "4px 8px" }}>
               <Icon name="shield" size={20} color={COLORS.primaryDark} />

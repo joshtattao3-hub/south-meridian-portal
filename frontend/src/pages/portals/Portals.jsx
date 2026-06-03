@@ -97,14 +97,7 @@ export function AdminPortal({ setView }) {
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar role="admin" activePage={page} setActivePage={setPage} setView={setView} />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", background: COLORS.bg, overflow: "auto" }}>
-        <PortalHeader
-          title={current.title}
-          user={{
-            initials: `${user?.first_name?.[0] ?? ""}${user?.last_name?.[0] ?? ""}`.toUpperCase(),
-            name: `${user?.first_name ?? ""} ${user?.last_name ?? ""}`.trim(),
-            role: "Administrator",
-          }}
-        />
+        <PortalHeader title={current.title} />
         {current.comp}
       </div>
     </div>

@@ -3,6 +3,7 @@ import COLORS from "../../constants/colors";
 import { Badge, Btn, Card, StatCard } from "../../components/UI";
 import Icon from "../../components/Icon";
 import { COMPLAINTS, DUES, FACILITIES } from "../../constants/mockData";
+import { useAuth } from "../../context/AuthContext";
 
 export function ComplaintsPage() {
   const [showForm, setShowForm] = useState(false);
@@ -78,13 +79,17 @@ export function ComplaintsPage() {
 }
 
 export function DuesPage() {
+  const { user } = useAuth();
+  const balance = user?.balance ?? 1500;
+  const duePeriod = user?.due_period ?? "June 2026";
+  const dueDate = user?.due_date ?? "Jun 15";
   return (
     <div style={{ padding: 28 }}>
       <h3 style={{ margin: "0 0 20px", fontSize: 18, fontWeight: 700, color: COLORS.text }}>HOA Dues & Payments</h3>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16, marginBottom: 24 }}>
-        <StatCard icon="dollar" label="Current Balance" value="₱1,500" color={COLORS.warning} sub="June 2026" />
+        <StatCard icon="dollar" label="Current Balance" value={`₱${balance.toLocaleString()}`} color={COLORS.warning} sub={duePeriod} />
         <StatCard icon="check" label="Total Paid (2026)" value="₱6,000" color={COLORS.success} sub="4 months" />
-        <StatCard icon="calendar" label="Next Due Date" value="Jun 15" color={COLORS.primary} sub="₱1,500" />
+        <StatCard icon="calendar" label="Next Due Date" value={dueDate} color={COLORS.primary} sub={`₱${balance.toLocaleString()}`} />
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 20 }}>
         <Card>
@@ -118,8 +123,8 @@ export function DuesPage() {
           <h4 style={{ margin: "0 0 16px", fontWeight: 700, color: COLORS.text }}>Pay Now</h4>
           <div style={{ background: COLORS.warningBg, borderRadius: 10, padding: 16, marginBottom: 16, textAlign: "center" }}>
             <div style={{ fontSize: 12, color: COLORS.warning, fontWeight: 600 }}>AMOUNT DUE</div>
-            <div style={{ fontSize: 32, fontWeight: 800, color: COLORS.warning, margin: "6px 0" }}>₱1,500</div>
-            <div style={{ fontSize: 12, color: COLORS.warning }}>June 2026 · Due Jun 15</div>
+            <div style={{ fontSize: 32, fontWeight: 800, color: COLORS.warning, margin: "6px 0" }}>₱{balance.toLocaleString()}</div>
+            <div style={{ fontSize: 12, color: COLORS.warning }}>{duePeriod} · Due {dueDate}</div>
           </div>
           {["GCash", "Maya", "Bank Transfer", "Cash (On-site)"].map(m => (
             <button key={m} style={{ width: "100%", textAlign: "left", padding: "10px 14px", borderRadius: 8, border: `1.5px solid ${COLORS.border}`, background: "#fff", fontSize: 13, fontWeight: 500, cursor: "pointer", marginBottom: 8, fontFamily: "inherit", color: COLORS.text }}>{m}</button>
@@ -135,7 +140,7 @@ export function ReservationsPage() {
   const [selectedFacility, setSelectedFacility] = useState(null);
   const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const dates = [2, 3, 4, 5, 6, 7, 8];
-  const occupied = { "3-1": true, "5-2": true, "6-0": true, "7-1": true };
+  const occupied = { "3-1": true, "4-2": true, "6-4": true, "8-6": true };
 
   return (
     <div style={{ padding: 28 }}>
@@ -162,7 +167,7 @@ export function ReservationsPage() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 4, textAlign: "center" }}>
               {days.map(d => <div key={d} style={{ fontSize: 11, fontWeight: 600, color: COLORS.textMid, padding: "4px 0" }}>{d}</div>)}
               {dates.map((d, i) => {
-                const key = `${d}-${i % 3}`;
+                const key = `${d}-${i}`;
                 const isOccupied = occupied[key];
                 return (
                   <div key={d} style={{ padding: "8px 4px", borderRadius: 8, fontSize: 13, fontWeight: 500, cursor: isOccupied ? "default" : "pointer", background: isOccupied ? COLORS.dangerBg : d === 5 ? COLORS.primary : "#fff", color: isOccupied ? COLORS.danger : d === 5 ? "#fff" : COLORS.text, border: `1px solid ${isOccupied ? COLORS.danger + "33" : COLORS.border}` }}>{d}</div>
@@ -202,7 +207,7 @@ export function ReservationsPage() {
           <tbody>
             {[
               { facility: "Main Clubhouse", date: "Jun 7, 2026", slot: "1PM–5PM", purpose: "Birthday Party", status: "Pending" },
-              { facility: "Basketball Court", date: "May 20, 2026", slot: "6AM–9AM", purpose: "Sports Practice", status: "Resolved" },
+              { facility: "Basketball Court", date: "May 20, 2026", slot: "6AM–9AM", purpose: "Sports Practice", status: "Approved" },
             ].map((r, i) => (
               <tr key={i} style={{ borderBottom: `1px solid ${COLORS.border}` }}>
                 <td style={{ padding: "12px", fontWeight: 600, color: COLORS.text }}>{r.facility}</td>

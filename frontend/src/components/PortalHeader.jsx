@@ -25,7 +25,7 @@ export default function PortalHeader({ title }) {
 
   const displayName = `${user?.first_name ?? ""} ${user?.last_name ?? ""}`.trim() || "User";
   const displayRole = user?.role
-    ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
+    ? `${user.role.charAt(0).toUpperCase()}${user.role.slice(1)}${user.role === "resident" && user?.block_lot ? ` · ${user.block_lot}` : ""}`
     : "";
 
   // Mock notifications — replace with real data from your API
