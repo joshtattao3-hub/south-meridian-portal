@@ -42,16 +42,19 @@ async function getComplaintById(req, res, next) {
 }
 
 // POST /api/complaints
+// FIX: category was never being saved — added to INSERT and validation
 async function createComplaint(req, res, next) {
   try {
-    const { subject, description, priority } = req.body;
-    if (!subject || !description || !priority) {
-      return res.status(400).json({ error: "Subject, description, and priority are required." });
+    const { subject, description, priority, category } = req.body;
+
+    if (!subject || !description || !priority || !category) {
+      return res.status(400).json({ error: "Subject, description, priority, and category are required." });
     }
+
     const result = await pool.query(
-      `INSERT INTO complaints (resident_id, subject, description, priority, status)
-       VALUES ($1, $2, $3, $4, 'Pending') RETURNING *`,
-      [req.user.id, subject, description, priority]
+      `INSERT INTO complaints (resident_id, subject, description, priority, category, status)
+       VALUES ($1, $2, $3, $4, $5, 'Pending') RETURNING *`,
+      [req.user.id, subject, description, priority, category]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
