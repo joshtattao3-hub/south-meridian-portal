@@ -13,7 +13,9 @@ export function Badge({ label }) {
   );
 }
 
-export function Btn({ children, variant = "primary", small, onClick, style = {} }) {
+export function Btn({ children, variant = "primary", small, style = {}, ...rest }) {
+  // ↑ `onClick`, `disabled`, `type`, and any future prop all flow through `...rest`
+
   const base = {
     border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 600,
     fontFamily: "inherit", display: "inline-flex", alignItems: "center", gap: 6,
@@ -43,13 +45,19 @@ export function Btn({ children, variant = "primary", small, onClick, style = {} 
         .btn-light:hover { background: ${COLORS.border} !important; transform: translateY(-1px); }
         .btn-outline-white:hover { background: rgba(255,255,255,0.25) !important; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(255,255,255,0.15); }
         .btn-primary:active, .btn-gold:active, .btn-ghost:active, .btn-danger:active, .btn-light:active, .btn-outline-white:active { transform: translateY(0px) scale(0.98); }
+        button:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; box-shadow: none !important; filter: none !important; }
       `;
       document.head.appendChild(tag);
     }
   }, []);
 
   return (
-    <button className={`btn-${variant}`} style={{ ...base, ...variantStyles[variant], ...style }} onClick={onClick}>
+    <button
+      type="button"           // safe default — never triggers form submit accidentally
+      className={`btn-${variant}`}
+      style={{ ...base, ...variantStyles[variant], ...style }}
+      {...rest}               // onClick, disabled, type override, aria-*, data-*, etc.
+    >
       {children}
     </button>
   );

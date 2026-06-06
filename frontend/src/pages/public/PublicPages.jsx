@@ -183,10 +183,10 @@ export function ContactPage() {
 
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {[
-                { icon: "map",      label: "Address",      value: "South Meridian Homes Phase 2, Dasmariñas, Cavite" },
+                { icon: "map",      label: "Address",      value: "South Meridian Homes Phase 2, Salitran IV, Dasmariñas, Cavite" },
                 { icon: "phone",    label: "Phone",        value: "(046) 123-4567" },
                 { icon: "mail",     label: "Email",        value: "hoa@southmeridian.com" },
-                { icon: "calendar", label: "Office Hours", value: "Mon–Fri, 8:00 AM – 5:00 PM" },
+                { icon: "calendar", label: "Office Hours", value: "Mon–Sun, 8:00 AM – 5:00 PM" },
               ].map(c => (
                 <Card key={c.label} pad="1rem" style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
                   <div style={{ background: COLORS.primaryBg, borderRadius: 8, padding: 8, flexShrink: 0 }}>
