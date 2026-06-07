@@ -120,32 +120,13 @@ export default function Sidebar({ role, activePage, setActivePage, setView }) {
 
         {/* Need Help? — only shown when expanded */}
         {!collapsed && (
-          <div style={{
-            margin: "0 8px 8px",
-            background: "rgba(255,255,255,0.06)",
-            borderRadius: 10,
-            padding: "12px 14px",
-            flexShrink: 0,
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-              <div style={{ background: COLORS.gold, borderRadius: "50%", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <span style={{ color: COLORS.primaryDark, fontSize: 12, fontWeight: 800 }}>?</span>
-              </div>
-              <span style={{ color: "#fff", fontSize: 14, fontWeight: 700 }}>Need help?</span>
+          <div style={{ margin: "0 8px 8px", background: "rgba(255,255,255,0.06)", borderRadius: 10, padding: "12px 14px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+              <div style={{ width: 22, height: 22, borderRadius: "50%", background: COLORS.gold, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: COLORS.primaryDark }}>?</div>
+              <span style={{ fontSize: 12, fontWeight: 700, color: "#fff" }}>Need help?</span>
             </div>
-            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, marginBottom: 8, lineHeight: 1.4 }}>
-              Contact the HOA Office
-            </div>
-            <button
-              onClick={() => setActivePage("contact")}
-              style={{
-                display: "block", width: "100%",
-                padding: "6px 10px", borderRadius: 6, border: "none",
-                background: COLORS.gold, color: COLORS.primaryDark,
-                fontSize: 11, fontWeight: 700, cursor: "pointer",
-                fontFamily: "inherit", textAlign: "center",
-              }}
-            >
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 10 }}>Contact the HOA Office</div>
+            <button style={{ width: "100%", background: COLORS.gold, border: "none", borderRadius: 8, padding: "7px 0", fontSize: 12, fontWeight: 700, color: COLORS.primaryDark, cursor: "pointer", fontFamily: "inherit" }}>
               Contact Us
             </button>
           </div>

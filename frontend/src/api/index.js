@@ -25,6 +25,45 @@ export const api = {
   register: (data) => request("/auth/register", { method: "POST", body: JSON.stringify(data) }),
   getMe:    ()     => request("/auth/me"),
 
+  // Notifications (derived from announcements + dues)
+  getNotifications: () => Promise.all([
+    request("/announcements"),
+    request("/dues"),
+  ]).then(([announcements, dues]) => {
+    const annNotifs = announcements.map(a => ({
+      id: "ann-" + a.id,
+      text: a.title,
+      sub: "New announcement posted",
+      time: a.date ? new Date(a.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—",
+      unread: true,
+      type: "announcement",
+    }));
+    const duesNotifs = dues
+      .filter(d => d.is_posted)
+      .map(d => ({
+        id: "due-" + d.id,
+        text: `${d.label} dues reminder posted`,
+        sub: `Due on ${new Date(d.due_date).toLocaleDateString("en-US", { month: "long", day: "numeric" })}`,
+        time: d.created_at ? new Date(d.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—",
+        unread: d.payment_status !== "Paid",
+        type: "dues",
+      }));
+    return [...duesNotifs, ...annNotifs].slice(0, 10);
+  }),
+
+  // Profile
+  updateProfile: (id, data) => request(`/users/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  uploadAvatar:  (id, file) => {
+    const formData = new FormData();
+    formData.append("avatar", file);
+    const token = localStorage.getItem("token");
+    return fetch(`${BASE_URL}/users/${id}/avatar`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    }).then(r => r.json());
+  },
+
   // Users
   getUsers:   (params = {}) => request("/users?" + new URLSearchParams(params)),
   getUser:    (id)          => request(`/users/${id}`),
@@ -40,10 +79,10 @@ export const api = {
   deleteComplaint: (id)          => request(`/complaints/${id}`, { method: "DELETE" }),
 
   // Dues
-  getDues:       (params = {}) => request("/dues?" + new URLSearchParams(params)),
+  getDues:       ()            => request("/dues"),
   getPayments:   ()            => request("/dues/payments"),
   createPeriod:  (data)        => request("/dues/periods", { method: "POST", body: JSON.stringify(data) }),
-  submitPayment: (data)        => request("/dues/pay",     { method: "POST", body: JSON.stringify(data) }),
+  submitPayment: (body)        => request("/dues/pay", { method: "POST", body: JSON.stringify(body) }),
   updatePayment: (id, data)    => request(`/dues/payments/${id}`, { method: "PUT", body: JSON.stringify(data) }),
 
   // Reservations

@@ -16,7 +16,7 @@ export function ResidentPortal({ setView }) {
   const pageMap = {
     "dashboard":      { title: "Dashboard",            comp: <ResidentDashboard setView={setPage} /> },
     "complaints":     { title: "My Complaints",         comp: <ComplaintsPage /> },
-    "dues":           { title: "HOA Dues & Payments",   comp: <DuesPage /> },
+    "dues": { title: "HOA Dues & Payments", subtitle: "View dues reminders, payment status, and important updates from the HOA Office.", comp: <DuesPage /> },
     "reservations":   { title: "Facility Reservations", comp: <ReservationsPage /> },
     "documents":      { title: "Documents & Forms",     comp: <DocumentsPage /> },
     "announcements-p":{ title: "Announcements",         comp: <div style={{ padding: 28 }}><AnnouncementsPage /></div> },
@@ -33,6 +33,7 @@ export function ResidentPortal({ setView }) {
       <div style={{ flex: 1, display: "flex", flexDirection: "column", background: COLORS.bg, overflowY: "auto" }}>
         <PortalHeader
           title={current.title}
+          subtitle={current.subtitle}
           user={{
             initials: `${user?.first_name?.[0] ?? ""}${user?.last_name?.[0] ?? ""}`.toUpperCase(),
             name: `${user?.first_name ?? ""} ${user?.last_name ?? ""}`.trim(),

@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import COLORS from "../../constants/colors";
 import { Badge, Card, Btn } from "../../components/UI";
 import Icon from "../../components/Icon";
-import { ANNOUNCEMENTS } from "../../constants/mockData";
+import { api } from "../../api";
+
+const PRIORITY_ICONS = {
+  "High Priority":   "alert",
+  "Medium Priority": "calendar",
+  "Low Priority":    "bell",
+  "General":         "bell",
+};
 
 function SkeletonCard() {
   return (
@@ -20,8 +27,22 @@ function SkeletonCard() {
 }
 
 export default function AnnouncementsPage({ setView }) {
-  const [loading] = useState(false); // set to true to preview skeleton
-  const items = ANNOUNCEMENTS;
+  const [loading, setLoading]       = useState(true);
+  const [items, setItems]           = useState([]);
+  const [priorityFilter, setPriority] = useState("All Priorities");
+
+  useEffect(() => {
+    api.getAnnouncements()
+      .then(data => setItems(data))
+      .catch(() => setItems([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const priorities = ["All Priorities", "High Priority", "Medium Priority", "Low Priority"];
+
+  const filtered = priorityFilter === "All Priorities"
+    ? items
+    : items.filter(a => a.tag === priorityFilter);
 
   return (
     <>
@@ -31,17 +52,42 @@ export default function AnnouncementsPage({ setView }) {
         }
       `}</style>
       <div style={{ padding: "28px 24px" }}>
+
+        {/* Header row */}
         <div className="ann-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-          <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: COLORS.text }}>Announcements</h3>
-          <span style={{ fontSize: 12, color: COLORS.textMid, background: COLORS.primaryBg, borderRadius: 20, padding: "3px 10px" }}>
-            {items.length} total
-          </span>
+          <p style={{ margin: 0, fontSize: 13, color: COLORS.textMid }}>
+            Stay updated with the latest news and important updates from your HOA.
+          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {/* Priority filter */}
+            <div style={{ position: "relative" }}>
+              <select
+                value={priorityFilter}
+                onChange={e => setPriority(e.target.value)}
+                style={{
+                  padding: "8px 36px 8px 14px", borderRadius: 8,
+                  border: `1.5px solid ${COLORS.border}`, fontSize: 13,
+                  fontFamily: "inherit", appearance: "none",
+                  background: "#fff", color: COLORS.text, cursor: "pointer",
+                  fontWeight: 500,
+                }}
+              >
+                {priorities.map(p => <option key={p}>{p}</option>)}
+              </select>
+              <div style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: COLORS.textMid, fontSize: 11 }}>▾</div>
+            </div>
+            {/* Total badge */}
+            <span style={{ fontSize: 12, color: COLORS.primary, background: COLORS.primaryBg, borderRadius: 20, padding: "6px 14px", fontWeight: 600, whiteSpace: "nowrap" }}>
+              {filtered.length} total
+            </span>
+          </div>
         </div>
 
+        {/* List */}
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           {loading ? (
             [1,2,3].map(i => <SkeletonCard key={i} />)
-          ) : items.length === 0 ? (
+          ) : filtered.length === 0 ? (
             <div style={{ textAlign: "center", padding: "60px 24px", background: "#fff", borderRadius: 14, border: `1px solid ${COLORS.border}` }}>
               <div style={{ background: COLORS.primaryBg, borderRadius: "50%", width: 64, height: 64, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
                 <Icon name="bell" size={28} color={COLORS.primary} />
@@ -50,18 +96,37 @@ export default function AnnouncementsPage({ setView }) {
               <div style={{ fontSize: 13, color: COLORS.textMid }}>Check back later for HOA updates and notices.</div>
             </div>
           ) : (
-            items.map(a => (
-              <Card key={a.id}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8, flexWrap: "wrap", gap: 8 }}>
-                  <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                    <Badge label={a.tag} />
-                    <span style={{ fontSize: 11, color: COLORS.textLight }}>{a.date}</span>
-                  </div>
-                  <Btn small variant="light" onClick={() => setView("login")}>Read More</Btn>
+            filtered.map(a => (
+              <div key={a.id} style={{ background: "#fff", borderRadius: 14, border: `1px solid ${COLORS.border}`, padding: "20px 24px", display: "flex", alignItems: "center", gap: 20 }}>
+                {/* Icon */}
+                <div style={{ background: COLORS.primaryBg, borderRadius: 12, width: 56, height: 56, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <Icon name={PRIORITY_ICONS[a.tag] ?? "bell"} size={26} color={COLORS.primary} />
                 </div>
-                <div style={{ fontWeight: 700, fontSize: 15, color: COLORS.text, marginBottom: 6 }}>{a.title}</div>
-                <p style={{ fontSize: 13, color: COLORS.textMid, margin: 0, lineHeight: 1.6 }}>{a.body}</p>
-              </Card>
+
+                {/* Content */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                    <Badge label={a.tag} />
+                  </div>
+                  <div style={{ fontWeight: 700, fontSize: 15, color: COLORS.text, marginBottom: 4 }}>{a.title}</div>
+                  <p style={{ fontSize: 13, color: COLORS.textMid, margin: 0, lineHeight: 1.6 }}>{a.body}</p>
+                </div>
+
+                {/* Right: date + button */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 12, flexShrink: 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, color: COLORS.textMid, fontSize: 12 }}>
+                    <Icon name="calendar" size={13} color={COLORS.textMid} />
+                    {a.date}
+                  </div>
+                  <Btn small onClick={() => setView?.("login")}
+                    style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    Read More
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                  </Btn>
+                </div>
+              </div>
             ))
           )}
         </div>
