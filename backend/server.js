@@ -18,6 +18,8 @@ app.use("/api/announcements", require("./routes/announcements"));
 app.use("/api/facilities",    require("./routes/facilities"));
 app.use("/api/events",        require("./routes/events"));
 
+app.use("/uploads", require("express").static("uploads"));
+
 app.use(require("./middleware/errorHandler"));
 
 app.get("/", (req, res) => res.json({ message: "South Meridian HOA API running" }));

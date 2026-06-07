@@ -3,22 +3,25 @@ const pool = require("../db");
 // GET /api/dues — returns periods with payment status for the resident
 async function getDues(req, res, next) {
   try {
+    if (!req.user) return res.status(401).json({ error: "Unauthorized" });
+    
     let query, params = [];
 
     if (req.user.role === "resident") {
       query = `SELECT dp.*, pay.status as payment_status, pay.paid_at, pay.paid_amount, pay.reference
-               FROM dues_periods dp
-               LEFT JOIN dues_payments pay ON dp.id = pay.period_id AND pay.resident_id = $1
-               ORDER BY dp.period_month DESC`;
+              FROM dues_periods dp
+              LEFT JOIN dues_payments pay ON dp.id = pay.period_id AND pay.resident_id = $1
+              WHERE dp.is_posted = true
+              ORDER BY dp.period_month DESC`;
       params = [req.user.id];
     } else {
-      query = `SELECT dp.*, pay.status as payment_status, pay.paid_at, pay.paid_amount,
-               u.first_name, u.last_name, u.block_lot
-               FROM dues_periods dp
-               LEFT JOIN dues_payments pay ON dp.id = pay.period_id
-               LEFT JOIN users u ON pay.resident_id = u.id
-               ORDER BY dp.period_month DESC`;
-    }
+  query = `SELECT dp.*, pay.status as payment_status, pay.paid_at, pay.paid_amount, pay.reference
+          FROM dues_periods dp
+          LEFT JOIN dues_payments pay ON dp.id = pay.period_id
+          WHERE dp.is_posted = true
+          ORDER BY dp.period_month DESC`;
+  params = [];
+  }
 
     const result = await pool.query(query, params);
     res.json(result.rows);
