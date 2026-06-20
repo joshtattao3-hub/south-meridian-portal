@@ -58,13 +58,13 @@ async function createUser(req, res, next) {
 // PUT /api/users/:id
 async function updateUser(req, res, next) {
   try {
-    const { first_name, last_name, email, block_lot, contact, role, status } = req.body;
+    const { first_name, last_name, email, block_lot, contact, role, status, phone, last_login } = req.body;
     const result = await pool.query(
       `UPDATE users SET first_name=$1, last_name=$2, email=$3, block_lot=$4,
-       contact=$5, role=$6, status=$7, updated_at=NOW()
-       WHERE id=$8
+       contact=$5, role=$6, status=$7, phone=$8, last_login=$9, updated_at=NOW()
+       WHERE id=$10
        RETURNING id, first_name, last_name, email, block_lot, contact, role, status`,
-      [first_name, last_name, email, block_lot, contact, role, status, req.params.id]
+      [first_name, last_name, email, block_lot, contact, role, status, phone, last_login, req.params.id]
     );
     if (!result.rows[0]) return res.status(404).json({ error: "User not found." });
     res.json(result.rows[0]);
