@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import COLORS from "../../constants/colors";
-import { Badge, Btn, Card, StatCard } from "../../components/UI";
+import { Badge, Btn, Card } from "../../components/UI";
 import Icon from "../../components/Icon";
-import { DUES, FACILITIES } from "../../constants/mockData";
 import { useAuth } from "../../context/AuthContext";
 import { api } from "../../api";
 
@@ -117,6 +116,7 @@ const EMPTY_FORM = { category: "Infrastructure", priority: "Medium", subject: ""
 
 export function ComplaintsPage() {
   const { user } = useAuth();
+  const { COLORS } = useTheme();
   const [showForm, setShowForm]          = useState(false);
   const [selectedComplaint, setSelected] = useState(null);
   const [form, setForm]                  = useState(EMPTY_FORM);
@@ -334,16 +334,16 @@ export function ComplaintsPage() {
       <div style={{ padding: "24px 28px" }}>
 
         {/* Page header */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-          <Btn type="button" onClick={() => setShowForm(true)} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+          <div>
+            <p style={{ margin: "4px 0 0", fontSize: 13, color: COLORS.textLight }}>
+              View and track the status of your submitted complaints.
+            </p>
+          </div>
+          <Btn type="button" onClick={() => setShowForm(true)} style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
             <Icon name="plus" size={15} color="#fff" /> New Complaint
           </Btn>
         </div>
-
-        {/* Subtitle */}
-        <p style={{ margin: "0 0 20px", fontSize: 13, color: COLORS.textLight }}>
-          View and track the status of your submitted complaints.
-        </p>
 
         <Card style={{ padding: 0, overflow: "hidden" }}>
           {listError && (
@@ -698,91 +698,6 @@ export function DuesPage() {
       <div style={{ marginTop: 28, paddingTop: 16, borderTop: `1px solid ${COLORS.border}`, textAlign: "center", fontSize: 11, color: COLORS.textLight }}>
         © 2026 South Meridian Phase 2 HOA. All rights reserved.
       </div>
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// ReservationsPage
-// ---------------------------------------------------------------------------
-export function ReservationsPage() {
-  const [selectedFacility, setSelectedFacility] = useState(null);
-  const days  = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const dates = [2, 3, 4, 5, 6, 7, 8];
-  const occupied = { "3-1": true, "4-2": true, "6-4": true, "8-6": true };
-
-  return (
-    <div style={{ padding: 28 }}>
-      <h3 style={{ margin: "0 0 20px", fontSize: 18, fontWeight: 700, color: COLORS.text }}>Facility Reservations</h3>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16, marginBottom: 24 }}>
-        {FACILITIES.map(f => (
-          <Card key={f.id} style={{ cursor: "pointer", border: `2px solid ${selectedFacility === f.id ? COLORS.primary : COLORS.border}`, transition: "all 0.15s" }} onClick={() => setSelectedFacility(selectedFacility === f.id ? null : f.id)}>
-            <div style={{ background: selectedFacility === f.id ? COLORS.primaryBg : COLORS.bg, borderRadius: 10, padding: 12, textAlign: "center", marginBottom: 10 }}>
-              <Icon name={f.icon} size={28} color={selectedFacility === f.id ? COLORS.primary : COLORS.textMid} />
-            </div>
-            <div style={{ fontWeight: 700, fontSize: 13, color: COLORS.text }}>{f.name}</div>
-            <div style={{ fontSize: 11, color: COLORS.textLight, marginTop: 2 }}>{f.capacity}</div>
-          </Card>
-        ))}
-      </div>
-      {selectedFacility && (
-        <Card style={{ marginBottom: 20 }}>
-          <h4 style={{ margin: "0 0 16px", color: COLORS.text }}>Select Date & Time — {FACILITIES.find(f => f.id === selectedFacility)?.name}</h4>
-          <div style={{ marginBottom: 16 }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: COLORS.textMid, marginBottom: 10 }}>June 2026</div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 4, textAlign: "center" }}>
-              {days.map(d => <div key={d} style={{ fontSize: 11, fontWeight: 600, color: COLORS.textMid, padding: "4px 0" }}>{d}</div>)}
-              {dates.map((d, i) => {
-                const key = `${d}-${i}`;
-                const isOccupied = occupied[key];
-                return <div key={d} style={{ padding: "8px 4px", borderRadius: 8, fontSize: 13, fontWeight: 500, cursor: isOccupied ? "default" : "pointer", background: isOccupied ? COLORS.dangerBg : d === 5 ? COLORS.primary : "#fff", color: isOccupied ? COLORS.danger : d === 5 ? "#fff" : COLORS.text, border: `1px solid ${isOccupied ? COLORS.danger + "33" : COLORS.border}` }}>{d}</div>;
-              })}
-            </div>
-          </div>
-          <div style={{ marginBottom: 16 }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: COLORS.textMid, marginBottom: 8 }}>Available Time Slots</div>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {FACILITIES.find(f => f.id === selectedFacility)?.slots.map(s => (
-                <button key={s} type="button" style={{ padding: "6px 14px", borderRadius: 8, border: `1.5px solid ${COLORS.primary}`, background: COLORS.primaryBg, color: COLORS.primary, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>{s}</button>
-              ))}
-            </div>
-          </div>
-          <div style={{ marginBottom: 14 }}>
-            <label style={{ fontSize: 12, fontWeight: 600, color: COLORS.textMid, display: "block", marginBottom: 4 }}>Purpose / Notes</label>
-            <textarea rows={2} style={{ width: "100%", padding: "9px 12px", borderRadius: 8, border: `1.5px solid ${COLORS.border}`, fontSize: 14, fontFamily: "inherit", boxSizing: "border-box", resize: "vertical" }} placeholder="Birthday party, family reunion, etc." />
-          </div>
-          <div style={{ display: "flex", gap: 10 }}>
-            <Btn type="button">Submit Reservation</Btn>
-            <Btn type="button" variant="light" onClick={() => setSelectedFacility(null)}>Cancel</Btn>
-          </div>
-        </Card>
-      )}
-      <Card>
-        <h4 style={{ margin: "0 0 16px", fontWeight: 700, color: COLORS.text }}>My Reservations</h4>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-          <thead>
-            <tr style={{ borderBottom: `2px solid ${COLORS.border}` }}>
-              {["Facility", "Date", "Time Slot", "Purpose", "Status"].map(h => (
-                <th key={h} style={{ textAlign: "left", padding: "8px 12px", color: COLORS.textMid, fontWeight: 600, fontSize: 11, textTransform: "uppercase" }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              { facility: "Main Clubhouse",   date: "Jun 7, 2026",  slot: "1PM–5PM", purpose: "Birthday Party",  status: "Pending" },
-              { facility: "Basketball Court", date: "May 20, 2026", slot: "6AM–9AM", purpose: "Sports Practice", status: "Approved" },
-            ].map((r, i) => (
-              <tr key={i} style={{ borderBottom: `1px solid ${COLORS.border}` }}>
-                <td style={{ padding: "12px", fontWeight: 600, color: COLORS.text }}>{r.facility}</td>
-                <td style={{ padding: "12px", color: COLORS.textMid }}>{r.date}</td>
-                <td style={{ padding: "12px", color: COLORS.textMid }}>{r.slot}</td>
-                <td style={{ padding: "12px", color: COLORS.textMid }}>{r.purpose}</td>
-                <td style={{ padding: "12px" }}><Badge label={r.status} /></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </Card>
     </div>
   );
 }

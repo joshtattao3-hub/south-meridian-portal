@@ -8,6 +8,8 @@ const COLORS = {
   goldLight:   "#FFF8E1",
   white:       "#FFFFFF",
   bg:          "#F5F7F5",
+  bgCard:      "#FFFFFF",
+  bgHover:     "#F0F4F0",
   text:        "#263238",
   textMid:     "#546E7A",
   textLight:   "#90A4AE",

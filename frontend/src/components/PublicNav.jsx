@@ -2,6 +2,7 @@ import COLORS from "../constants/colors";
 import Icon from "./Icon";
 import { Btn } from "./UI";
 
+
 const NAV_LINKS = ["Home", "Announcements", "Events", "About", "Contact"];
 
 export default function PublicNav({ setView, currentView, mobileOpen, setMobileOpen }) {

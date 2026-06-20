@@ -168,12 +168,10 @@ function SettingsModal({ user, onClose, onSaved }) {
 }
 
 // ── PortalHeader ──────────────────────────────────────────────────────────
-export default function PortalHeader({ title, subtitle }) {
+export default function PortalHeader({ title, subtitle, setPage }) {
   const { user, logout, updateUser } = useAuth();
   const [menuOpen, setMenuOpen]     = useState(false);
   const [notifOpen, setNotifOpen]   = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   const menuRef  = useRef(null);
   const notifRef = useRef(null);
 
@@ -206,9 +204,6 @@ export default function PortalHeader({ title, subtitle }) {
 
   return (
     <>
-      {showProfile && <ProfileModal user={user} onClose={() => setShowProfile(false)} onSaved={handleSaved} />}
-      {showSettings && <SettingsModal user={user} onClose={() => setShowSettings(false)} onSaved={handleSaved} />}
-
       <div style={{ background: "#fff", borderBottom: `1px solid ${COLORS.border}`, padding: "0 28px", minHeight: 60, display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 100, flexShrink: 0 }}>
 
         {/* Page Title */}
@@ -304,8 +299,8 @@ export default function PortalHeader({ title, subtitle }) {
 
                 {/* Menu items */}
                 {[
-                  { icon: "user",     label: "My Profile", action: () => { setMenuOpen(false); setShowProfile(true);  } },
-                  { icon: "settings", label: "Settings",   action: () => { setMenuOpen(false); setShowSettings(true); } },
+                  { icon: "user",     label: "My Profile", action: () => { setMenuOpen(false); setPage("profile");  } },
+                  { icon: "settings", label: "Settings",   action: () => { setMenuOpen(false); setPage("settings"); } },
                 ].map(item => (
                   <button key={item.label} onClick={item.action}
                     style={{ width: "100%", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, background: "none", border: "none", cursor: "pointer", fontFamily: "inherit", fontSize: 13, color: COLORS.text, textAlign: "left", transition: "background 0.12s" }}

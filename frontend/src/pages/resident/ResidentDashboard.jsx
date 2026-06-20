@@ -110,7 +110,7 @@ export default function ResidentDashboard({ setView }) {
 
           <div style={{ position: "relative" }}>
             <div style={{ color: "#fff", fontSize: 24, fontWeight: 800, marginBottom: 6 }}>
-              Hello, {user?.first_name ?? "Resident"}! 👋
+              Hello, {user?.first_name ?? "Resident"}! 
             </div>
             <div style={{ color: "rgba(255,255,255,0.65)", fontSize: 13 }}>
               {user?.block_lot ?? ""} · {today}

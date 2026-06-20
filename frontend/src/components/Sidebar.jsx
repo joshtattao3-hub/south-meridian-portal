@@ -131,27 +131,6 @@ export default function Sidebar({ role, activePage, setActivePage, setView }) {
             </button>
           </div>
         )}
-
-        {/* Logout */}
-        <div style={{ padding: "8px 8px 12px", borderTop: "1px solid rgba(255,255,255,0.08)", flexShrink: 0 }}>
-          <button
-            className="sidebar-item sidebar-logout"
-            onClick={() => { logout(); setView("home"); }}
-            title={collapsed ? "Log Out" : ""}
-            style={{
-              width: "100%", display: "flex", alignItems: "center",
-              gap: collapsed ? 0 : 10,
-              justifyContent: collapsed ? "center" : "flex-start",
-              padding: "9px 12px", borderRadius: 8, border: "none",
-              background: "transparent", color: "rgba(255,255,255,0.5)",
-              fontFamily: "inherit", fontSize: 13, cursor: "pointer",
-            }}
-          >
-            <Icon name="logout" size={16} color="rgba(255,255,255,0.4)" />
-            {!collapsed && <span className="sidebar-label">Log Out</span>}
-          </button>
-        </div>
-
       </div>
     </>
   );
