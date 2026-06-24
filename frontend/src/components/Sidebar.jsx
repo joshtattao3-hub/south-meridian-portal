@@ -19,6 +19,7 @@ export default function Sidebar({ role, activePage, setActivePage, setView }) {
     { id:"officer-dashboard",    icon:"home",     label:"Dashboard" },
     { id:"manage-announcements", icon:"bell",     label:"Announcements" },
     { id:"manage-complaints",    icon:"chat",     label:"Complaints" },
+    { id:"manage-dues",          icon:"dollar",   label:"Dues & Payments" },
     { id:"manage-reservations",  icon:"calendar", label:"Reservations" },
     { id:"residents-list",       icon:"users",    label:"Residents" },
   ];

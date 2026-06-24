@@ -24,6 +24,7 @@ export const api = {
   login:    (data) => request("/auth/login",    { method: "POST", body: JSON.stringify(data) }),
   register: (data) => request("/auth/register", { method: "POST", body: JSON.stringify(data) }),
   getMe:    ()     => request("/auth/me"),
+  
 
   // Notifications (derived from announcements + dues)
   getNotifications: () => Promise.all([

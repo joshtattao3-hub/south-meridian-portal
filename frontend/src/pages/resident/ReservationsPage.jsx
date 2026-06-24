@@ -75,7 +75,6 @@ function CancelModal({ reservation, onClose, onConfirm, loading }) {
 // ── Main Component ────────────────────────────────────────────────────────
 export default function ReservationsPage() {
   const { user } = useAuth();
-  const { COLORS } = useTheme();
 
   // ── Data ──
   const [facilities, setFacilities]   = useState([]);

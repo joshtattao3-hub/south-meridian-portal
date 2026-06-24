@@ -4,15 +4,18 @@ import COLORS from "../../constants/colors";
 import Sidebar from "../../components/Sidebar";
 import PortalHeader from "../../components/PortalHeader";
 import ResidentDashboard from "../resident/ResidentDashboard";
+import ResidentProfile  from "../resident/ResidentProfile";
+import ResidentSettings from "../resident/ResidentSettings";
+import ResidentAnnouncements from "../resident/ResidentAnnouncements";
 import { ComplaintsPage, DuesPage, DocumentsPage } from "../resident/ResidentPages";
 import ReservationsPage from "../resident/ReservationsPage";
 import { AdminDashboardPage, UserManagementPage, ReportsPage, ManageComplaintsPage, SystemSettingsPage } from "../admin/AdminPages";
 import AnnouncementsPage from "../public/AnnouncementsPage";
 import { ContactPage } from "../public/PublicPages";
-import ResidentProfile  from "../resident/ResidentProfile";
-import ResidentSettings from "../resident/ResidentSettings";
 import OfficerProfile   from "../officer/OfficerProfile";
 import OfficerSettings  from "../officer/OfficerSettings";
+import OfficerDashboard from "../officer/OfficerDashboard";
+import OfficerAnnouncements from "../officer/OfficerAnnouncements";
 import AdminProfile     from "../admin/AdminProfile";
 import AdminSettings    from "../admin/AdminSettings";
 
@@ -27,7 +30,7 @@ export function ResidentPortal({ setView }) {
     "dues":            { title: "HOA Dues & Payments",   subtitle: "View dues reminders, payment status, and important updates from the HOA Office.", comp: <DuesPage /> },
     "reservations":    { title: "Facility Reservations", comp: <ReservationsPage /> },
     "documents":       { title: "Documents & Forms",     comp: <DocumentsPage /> },
-    "announcements-p": { title: "Announcements",         comp: <div style={{ padding: 28 }}><AnnouncementsPage /></div> },
+    "announcements-p": { title: "Announcements",         comp: <ResidentAnnouncements setView={setPage} /> },
     "contact":         { title: "Contact Us",            comp: <div style={{ padding: 28 }}><ContactPage /></div> },
     "profile":         { title: "My Profile",            comp: <ResidentProfile /> },
     "settings":        { title: "Settings",              comp: <ResidentSettings /> },
@@ -60,10 +63,11 @@ export function OfficerPortal({ setView }) {
   const { user } = useAuth();
 
   const pageMap = {
-    "officer-dashboard":    { title: "Officer Dashboard",  comp: <AdminDashboardPage /> },
-    "manage-announcements": { title: "Announcements",      comp: <div style={{ padding: 28 }}><AnnouncementsPage /></div> },
+    "officer-dashboard":    { title: "Officer Dashboard",  comp: <OfficerDashboard /> },
+    "manage-announcements": { title: "Officer Announcements",      comp: <OfficerAnnouncements /> },
     "manage-complaints":    { title: "Manage Complaints",  comp: <ManageComplaintsPage /> },
     "manage-reservations":  { title: "Reservations",       comp: <ReservationsPage /> },
+    "manage-dues":          { title: "Dues & Payments",     comp: <DuesPage /> },
     "residents-list":       { title: "Resident Directory", comp: <UserManagementPage /> },
     "profile":              { title: "My Profile",         comp: <OfficerProfile /> },
     "settings":             { title: "Settings",           comp: <OfficerSettings /> },

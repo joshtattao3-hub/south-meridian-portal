@@ -167,6 +167,13 @@ function SettingsModal({ user, onClose, onSaved }) {
   );
 }
 
+// ── Navigation target per notification type ───────────────────────────────
+function getNavTarget(n) {
+  if (n.type === "announcement") return "announcements-p";
+  if (n.type === "dues")         return "dues";
+  return null;
+}
+
 // ── PortalHeader ──────────────────────────────────────────────────────────
 export default function PortalHeader({ title, subtitle, setPage }) {
   const { user, logout, updateUser } = useAuth();
@@ -202,6 +209,23 @@ export default function PortalHeader({ title, subtitle, setPage }) {
 
   function handleSaved(data) { updateUser(data); }
 
+  // Navigate from a notification click
+  function handleNotifClick(n) {
+    const target = getNavTarget(n);
+    if (target && setPage) {
+      // Mark as read locally
+      setNotifications(prev => prev.map(x => x.id === n.id ? { ...x, unread: false } : x));
+      setNotifOpen(false);
+      setPage(target);
+    }
+  }
+
+  // "View all notifications" → go to announcements
+  function handleViewAll() {
+    setNotifOpen(false);
+    if (setPage) setPage("announcements-p");
+  }
+
   return (
     <>
       <div style={{ background: "#fff", borderBottom: `1px solid ${COLORS.border}`, padding: "0 28px", minHeight: 60, display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 100, flexShrink: 0 }}>
@@ -236,21 +260,42 @@ export default function PortalHeader({ title, subtitle, setPage }) {
                 </div>
                 {notifications.length === 0
                   ? <div style={{ padding: "20px 16px", textAlign: "center", fontSize: 13, color: COLORS.textLight }}>No notifications yet.</div>
-                  : notifications.map(n => (
-                    <div key={n.id} style={{ padding: "11px 16px", borderBottom: `1px solid ${COLORS.border}`, background: n.unread ? COLORS.primaryBg : "#fff", cursor: "pointer", transition: "background 0.12s", display: "flex", gap: 10, alignItems: "flex-start" }}
-                      onMouseEnter={e => e.currentTarget.style.background = n.unread ? "#dcedc8" : COLORS.bg}
-                      onMouseLeave={e => e.currentTarget.style.background = n.unread ? COLORS.primaryBg : "#fff"}>
-                      {n.unread && <div style={{ width: 7, height: 7, borderRadius: "50%", background: COLORS.primary, flexShrink: 0, marginTop: 5 }} />}
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 12, color: COLORS.text, lineHeight: 1.45, fontWeight: n.unread ? 600 : 400 }}>{n.text}</div>
-                        <div style={{ fontSize: 11, color: COLORS.textLight, marginTop: 2 }}>{n.sub}</div>
-                        <div style={{ fontSize: 11, color: COLORS.textLight, marginTop: 1 }}>{n.time}</div>
-                      </div>
-                    </div>
-                  ))
+                  : notifications.map(n => {
+                      const target = getNavTarget(n);
+                      return (
+                        <div key={n.id}
+                          onClick={() => handleNotifClick(n)}
+                          style={{
+                            padding: "11px 16px",
+                            borderBottom: `1px solid ${COLORS.border}`,
+                            background: n.unread ? COLORS.primaryBg : "#fff",
+                            cursor: target ? "pointer" : "default",
+                            transition: "background 0.12s",
+                            display: "flex", gap: 10, alignItems: "flex-start",
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.background = n.unread ? "#dcedc8" : COLORS.bg}
+                          onMouseLeave={e => e.currentTarget.style.background = n.unread ? COLORS.primaryBg : "#fff"}>
+                          {n.unread && <div style={{ width: 7, height: 7, borderRadius: "50%", background: COLORS.primary, flexShrink: 0, marginTop: 5 }} />}
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: 12, color: COLORS.text, lineHeight: 1.45, fontWeight: n.unread ? 600 : 400 }}>{n.text}</div>
+                            <div style={{ fontSize: 11, color: COLORS.textLight, marginTop: 2 }}>{n.sub}</div>
+                            <div style={{ fontSize: 11, color: COLORS.textLight, marginTop: 1 }}>{n.time}</div>
+                            {target && (
+                              <div style={{ fontSize: 11, color: COLORS.primary, fontWeight: 600, marginTop: 4 }}>
+                                {n.type === "announcement" ? "View announcement →" : "View dues →"}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })
                 }
                 <div style={{ padding: "10px 16px", textAlign: "center" }}>
-                  <button style={{ fontSize: 12, color: COLORS.primary, background: "none", border: "none", cursor: "pointer", fontWeight: 600, fontFamily: "inherit" }}>View all notifications</button>
+                  <button
+                    onClick={handleViewAll}
+                    style={{ fontSize: 12, color: COLORS.primary, background: "none", border: "none", cursor: "pointer", fontWeight: 600, fontFamily: "inherit" }}>
+                    View all notifications
+                  </button>
                 </div>
               </div>
             )}

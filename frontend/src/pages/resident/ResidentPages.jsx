@@ -116,7 +116,6 @@ const EMPTY_FORM = { category: "Infrastructure", priority: "Medium", subject: ""
 
 export function ComplaintsPage() {
   const { user } = useAuth();
-  const { COLORS } = useTheme();
   const [showForm, setShowForm]          = useState(false);
   const [selectedComplaint, setSelected] = useState(null);
   const [form, setForm]                  = useState(EMPTY_FORM);
